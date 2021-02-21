@@ -2,13 +2,13 @@ const extButtons = [
   [
     {
       title: 'sin',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'sin('
     },
     {
       title: 'asin',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'asin('
     },
     {
       title: '<sup><small>y</small></sup>&radic;x',
@@ -24,13 +24,13 @@ const extButtons = [
   [
     {
       title: 'cos',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'cos('
     },
     {
       title: 'acos',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'acos('
     },
     {
       title: '<sup><small>3</small></sup>&radic;x',
@@ -46,13 +46,13 @@ const extButtons = [
   [
     {
       title: 'tg',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'tan('
     },
     {
       title: 'artg',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'atan('
     },
     {
       title: '&radic;x',
@@ -68,13 +68,13 @@ const extButtons = [
   [
     {
       title: 'ctg',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'cot('
     },
     {
       title: 'arctg',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'acot('
     },
     {
       title: 'log',
@@ -90,13 +90,13 @@ const extButtons = [
   [
     {
       title: '&pi;',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'pi'
     },
     {
       title: 'e',
-      type: '',
-      value: ''
+      type: 'operator',
+      value: 'e'
     },
     {
       title: '&plusmn;',

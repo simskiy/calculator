@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.calculator
+  div.calculator(ref="calc")
     input.input(
       type="text"
       v-model="value"
@@ -9,19 +9,20 @@
     )
     span.buff {{prevResult}}
     div.wrapper
-      div.table.table--left(v-if="show")
-        div.row(v-for="row in extButtons")
-          div.cell(v-for="cell in row")
-            button.btn(
-              v-html="cell.title"
-              @click="pressBtn(cell)"
-          )
+      transition(name="slide-fade")
+        div.table.table--left(v-if="show")
+          div.row(v-for="row in extButtons")
+            div.cell(v-for="cell in row")
+              button.btn(
+                v-html="cell.title"
+                @click="pressBtn(cell)"
+            )
       div.table.table--right
         div.row(v-for="row in buttons")
           div.cell(v-for="cell in row")
             button.btn(
               v-html="cell.title"
-              @click="pressBtn(cell)"
+              @click="pressBtn(cell, $event)"
           )
 </template>
 
@@ -37,11 +38,11 @@ export default {
       extButtons: extBtns,
       value: '',
       prevResult: '',
-      show: true
+      show: false
     }
   },
   methods: {
-    pressBtn (btn) {
+    pressBtn (btn, event) {
       this.$refs.input.focus()
       switch (btn.type) {
         case ('number'):
@@ -51,7 +52,12 @@ export default {
           break
         case ('enter'): this.value = this.result(this.value)
           break
-        case ('showExt'): this.show = !this.show
+        case ('showExt'): {
+          this.show = !this.show
+          setTimeout(() => {
+            event.target.innerText = this.show ? '=>' : '<='
+          }, 300)
+        }
       }
     },
     pressKey (event) {
@@ -80,6 +86,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$transition-time: 0.3s;
+
+.slide-fade-enter-active {
+  transition: all $transition-time cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-leave-active {
+  transition: all $transition-time cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active до версии 2.1.8 */ {
+  transform: translateX(1rem);
+  opacity: 0;
+}
 
 html {
   font-size: 16px;
@@ -96,6 +115,9 @@ html {
   display: inline-block;
   &--left {
     margin-right: 1rem;
+  }
+  &--right {
+    margin-left: auto;
   }
 }
 
