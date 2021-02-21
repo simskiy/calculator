@@ -1,4 +1,5 @@
 <template lang="pug">
+div.wrapper
   calculator.calc
 </template>
 
@@ -13,6 +14,10 @@ export default {
 </script>
 
 <style lang="scss">
+.wrapper {
+  display: flex;
+  width: 100%;
+}
 .calc {
   margin: auto;
 }

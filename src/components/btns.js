@@ -1,6 +1,11 @@
 const buttons = [
   [
     {
+      title: '<=',
+      type: 'showExt',
+      value: ''
+    },
+    {
       title: '(',
       type: 'operator',
       value: '('
@@ -9,11 +14,6 @@ const buttons = [
       title: ')',
       type: 'operator',
       value: ')'
-    },
-    {
-      title: '%',
-      type: 'operator',
-      value: ''
     },
     {
       title: 'CE',

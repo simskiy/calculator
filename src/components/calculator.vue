@@ -1,32 +1,79 @@
 <template lang="pug">
   div.calculator
-    input.input(type="text" v-model="value")
-    span.buff hello
+    input.input(
+      type="text"
+      v-model="value"
+      @keyup="pressKey($event)"
+      ref="input"
+      autofocus
+    )
+    span.buff {{prevResult}}
     div.wrapper
-      div.row(v-for="row in buttons")
-        div.cell(v-for="cell in row")
-          button.btn(v-html="cell.title" @click="inputBtn(cell)")
+      div.table.table--left(v-if="show")
+        div.row(v-for="row in extButtons")
+          div.cell(v-for="cell in row")
+            button.btn(
+              v-html="cell.title"
+              @click="pressBtn(cell)"
+          )
+      div.table.table--right
+        div.row(v-for="row in buttons")
+          div.cell(v-for="cell in row")
+            button.btn(
+              v-html="cell.title"
+              @click="pressBtn(cell)"
+          )
 </template>
 
 <script>
 import btns from './btns.js'
-const { evaluate } = require('mathjs')
+import extBtns from './extBtns.js'
+import { create, all } from 'mathjs'
 
 export default {
   data () {
     return {
       buttons: btns,
-      value: ''
+      extButtons: extBtns,
+      value: '',
+      prevResult: '',
+      show: true
     }
   },
   methods: {
-    inputBtn (btn) {
-      /* eslint-disable */
-      if (btn.type === 'number' || 'operator') this.value += btn.value
-      if (btn.type === 'cancel') this.value = ''
-      if (btn.type === 'enter') this.value = evaluate(this.value)
-      console.log(this.value)
-      /* eslint-enable */
+    pressBtn (btn) {
+      this.$refs.input.focus()
+      switch (btn.type) {
+        case ('number'):
+        case ('operator'): this.value += btn.value
+          break
+        case ('cancel'): this.value = ''
+          break
+        case ('enter'): this.value = this.result(this.value)
+          break
+        case ('showExt'): this.show = !this.show
+      }
+    },
+    pressKey (event) {
+      switch (event.keyCode) {
+        case (13): this.value = this.result(this.value)
+      }
+    },
+    result (value) {
+      const math = create(all)
+      const limitedEvaluate = math.evaluate
+
+      math.import({
+        import: 'Function import is disabled',
+        createUnit: 'Function createUnit is disabled',
+        evaluate: 'Function evaluate is disabled',
+        parse: 'Function parse is disabled',
+        simplify: 'Function simplify is disabled',
+        derivative: 'Function derivative is disabled'
+      }, { override: true })
+
+      this.prevResult = value
+      return limitedEvaluate(value)
     }
   }
 }
@@ -39,20 +86,23 @@ html {
 }
 
 .calculator {
-  display: inline-block;
   position: relative;
   border: 1px solid black;
   border-radius: 5px;
   padding: 0.3rem;
 }
 
-.wrapper {
-  display: table;
+.table {
+  display: inline-block;
+  &--left {
+    margin-right: 1rem;
+  }
 }
 
 .input {
   box-sizing: border-box;
   width: calc(100% - 0.4rem);
+  padding: 0.3rem;
   padding-top: 1.5rem;
   text-align: right;
   margin: 0.2rem;
@@ -63,23 +113,24 @@ html {
 .buff {
   position: absolute;
   top: 0.6rem;
-  right: 0.7rem;
+  right: 0.9rem;
   font-size: 0.8rem;
+  color: grey;
+  opacity: 0.8;
 }
 
 .row {
-  display: table-row;
-}
-
-.cell {
-  display: table-cell;
+  display: flex;
+  align-items: center;
 }
 
 .btn {
-  width: 5rem;
+  width: 4rem;
   height: 2rem;
   margin: 0.2rem;
-  font-size: 1.3rem;
+  padding: 0;
+  font-size: 1.1rem;
+  outline: none;
 }
 
 </style>
